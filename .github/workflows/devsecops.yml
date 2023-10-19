@@ -57,20 +57,30 @@ jobs:
         run: echo "Image pushed"
 
 
-  akto:
+  akto-api:
     runs-on: ubuntu-latest
     needs: package
     steps:
-      - name: akto
+      - name: akto-api
         env:
           AKTO_DASHBOARD_URL: ${{ secrets.AKTO_DASHBOARD_URL }}
           AKTO_API_KEY: ${{ secrets.AKTO_API_KEY }}
         run: docker run -v ${PWD}:/out  -e AKTO_DASHBOARD_URL=$AKTO_DASHBOARD_URL  -e TEST_IDS="JWT_NONE_ALGO REMOVE_TOKENS" -e API_COLLECTION_NAME=juice_shop_demo -e AKTO_API_KEY=$AKTO_API_KEY  -e OUTPUT_LEVEL=SUMMARY aktosecurity/akto-api-testing-cli:latest
       - run: cat output.txt >> $GITHUB_STEP_SUMMARY 
 
+  akto-llm:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+      - name: akto-llm
+        env:
+          AKTO_API_KEY: ${{ secrets.AKTO_API_KEY_LLM }}
+        run: docker run -v ${PWD}:/out  -e AKTO_DASHBOARD_URL=https://app.akto.io  -e TEST_IDS=PROMPT_INJECTION_STAN -e API_COLLECTION_NAME=llm_apis -e AKTO_API_KEY=$AKTO_API_KEY  -e OUTPUT_LEVEL=SUMMARY aktosecurity/akto-api-testing-cli:latest
+      - run: cat output.txt >> $GITHUB_STEP_SUMMARY 
+
   deploy:
     runs-on: ubuntu-latest
-    needs: akto
+    needs: akto-api
     steps:
       - name: "Trigger deployment"
         run: echo "Deployed successfully"
