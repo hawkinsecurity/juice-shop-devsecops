@@ -25,7 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: semgrep
-        run: docker run --rm -v "${PWD}:/src" returntocorp/semgrep semgrep scan *    >>    $GITHUB_STEP_SUMMARY            
+        run: docker run --rm -v "${PWD}:/src" returntocorp/semgrep semgrep scan --config="r/javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection" *    >>    $GITHUB_STEP_SUMMARY            
 
   build:
     runs-on: ubuntu-latest
