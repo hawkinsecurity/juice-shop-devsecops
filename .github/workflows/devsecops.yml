@@ -12,6 +12,16 @@ on:
         required: true  
 
 jobs:
+
+
+  terrascan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: terrascan
+        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws >> $GITHUB_STEP_SUMMARY            
+
+
   secret-leaks:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +36,6 @@ jobs:
       - name: semgrep
         run: docker run --rm -v "${PWD}:/src" returntocorp/semgrep semgrep scan *    >>    $GITHUB_STEP_SUMMARY            
 
-
   build:
     runs-on: ubuntu-latest
     needs: [secret-leaks, semgrep]
@@ -40,14 +49,6 @@ jobs:
     steps:
       - name: "Execute unit tests and smoke tests"
         run: echo "Test complete"
-
-  terrascan:
-    runs-on: ubuntu-latest
-    needs: test    
-    steps:
-      - uses: actions/checkout@v3
-      - name: terrascan
-        run: docker run --rm -t -v  "${PWD}:/src" tenable/terrascan scan -i cft -d /src/aws >> $GITHUB_STEP_SUMMARY            
 
   package:
     needs: terrascan
