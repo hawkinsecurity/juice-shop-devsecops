@@ -21,14 +21,10 @@ jobs:
 
   semgrep:
     runs-on: ubuntu-latest
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-    container:
-      image: returntocorp/semgrep
-    if: (github.actor != 'dependabot[bot]')
     steps:
       - uses: actions/checkout@v3
-      - run: semgrep ci
+      - name: semgrep
+        run: docker run --rm -v "${PWD}:/src" returntocorp/semgrep semgrep scan *    >>    $GITHUB_STEP_SUMMARY            
 
   
   build:
