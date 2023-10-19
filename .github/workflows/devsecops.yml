@@ -6,6 +6,7 @@ on:
       testing:
         type: choice
         options:
+          - DevOps
           - SAST/SCA
           - DAST/IAST
         required: true  
