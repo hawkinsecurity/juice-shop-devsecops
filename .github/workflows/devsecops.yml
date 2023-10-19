@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: terrascan
-        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws >> $GITHUB_STEP_SUMMARY            
+        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws
 
 
   secret-leaks:
