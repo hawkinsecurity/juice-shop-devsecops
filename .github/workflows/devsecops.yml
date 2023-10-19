@@ -12,6 +12,17 @@ on:
         required: true  
 
 jobs:
+  secret-leaks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        ref: ${{ github.head_ref }}
+    - name: trufflehog-actions-scan
+      uses: edplato/trufflehog-actions-scan@master
+
+  
   build:
     runs-on: ubuntu-latest
     steps:
