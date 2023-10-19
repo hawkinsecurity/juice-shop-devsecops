@@ -80,7 +80,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: akto-api
+    needs: [akto-api, akto-llm]
     steps:
       - name: "Trigger deployment"
         run: echo "Deployed successfully"
