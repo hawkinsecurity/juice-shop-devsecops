@@ -19,11 +19,13 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - name: "Execute unit tests and smoke tests"
         run: echo "Test complete"
 
   package:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: "Prepare Docker image"
@@ -32,8 +34,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: package
     steps:
       - name: "Trigger deployment"
         run: echo "Deployed successfully"
-
-
