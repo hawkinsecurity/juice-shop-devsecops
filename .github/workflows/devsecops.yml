@@ -16,9 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: trufflehog-actions-scan
-      run: docker run --rm -t -v "$PWD:/pwd" trufflesecurity/trufflehog:latest  filesystem /pwd/lib/
-      
+    - name: trufflehog
+      run: docker run --rm -t -v "$PWD:/pwd" trufflesecurity/trufflehog:latest  filesystem /pwd/lib/ >> $GITHUB_STEP_SUMMARY
   
   build:
     runs-on: ubuntu-latest
