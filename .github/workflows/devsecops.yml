@@ -67,6 +67,14 @@ jobs:
           AKTO_API_KEY: ${{ secrets.AKTO_API_KEY }}
         run: | 
           curl -H "X-API-KEY: $AKTO_API_KEY" -H "content-type: application/json" -d '{"testingRunHexId": "65380f17b0c62f3ac22594e3", "startTimestamp" : 0,"metadata": {"platform": "Github Actions"}}'  --compressed -X POST "https://app.akto.io/api/startTest"
+      - name: akto-api-docker
+        env:
+          AKTO_DASHBOARD_URL: ${{ secrets.AKTO_DASHBOARD_URL }}
+          AKTO_API_KEY: ${{ secrets.AKTO_API_KEY }}
+        run: docker run -v ${PWD}:/out  -e AKTO_DASHBOARD_URL=$AKTO_DASHBOARD_URL  -e TEST_IDS="JWT_NONE_ALGO REMOVE_TOKENS" -e API_COLLECTION_NAME=juice_shop_demo -e AKTO_API_KEY=$AKTO_API_KEY  -e OUTPUT_LEVEL=SUMMARY aktosecurity/akto-api-testing-cli:latest
+      - run: cat output.txt >> $GITHUB_STEP_SUMMARY 
+ 
+          
 
   akto-llm:
     runs-on: ubuntu-latest
