@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: trufflehog
-      run: docker run --rm -t -v "$PWD:/pwd" trufflesecurity/trufflehog:latest  filesystem /pwd/lib/ >> $GITHUB_STEP_SUMMARY
+      run: docker run --rm -t -v "$PWD:/pwd" trufflesecurity/trufflehog:latest  filesystem /pwd/lib/ | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY
 
   semgrep:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: terrascan
-        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws >> $GITHUB_STEP_SUMMARY || exit 0
+        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY || exit 0
 
   package:
     needs: terrascan
