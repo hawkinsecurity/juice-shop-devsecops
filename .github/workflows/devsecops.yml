@@ -40,6 +40,15 @@ jobs:
       - name: "Execute unit tests and smoke tests"
         run: echo "Test complete"
 
+
+  terrascan:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: terrascan
+        run: docker run --rm -t -v  "${PWD}:/pwd" tenable/terrascan scan -i cft -d /pwd/aws | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY || exit 0
+    
   package:
     needs: test
     runs-on: ubuntu-latest
