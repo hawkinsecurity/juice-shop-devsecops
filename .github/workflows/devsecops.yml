@@ -19,7 +19,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: trufflehog
       run: docker run --rm -t -v "$PWD:/pwd" trufflesecurity/trufflehog:latest  filesystem /pwd/lib/ | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' >> $GITHUB_STEP_SUMMARY
-      
+
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: semgrep
+        run: docker run --rm -v "${PWD}:/src" returntocorp/semgrep semgrep scan --config="r/javascript.sequelize.security.audit.sequelize-injection-express.express-sequelize-injection" --emacs *    >>    $GITHUB_STEP_SUMMARY   
+ 
   build:
     runs-on: ubuntu-latest
     steps:
